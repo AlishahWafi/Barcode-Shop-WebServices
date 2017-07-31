@@ -9,19 +9,24 @@ using System.Web.Http;
 
 namespace Shopping.Controllers
 {
-    public class registerController : ApiController
+    public class addImageController : ApiController
     {
         DBShoppingEntities db = new DBShoppingEntities();
 
         [HttpPost]
-        public IHttpActionResult register(Customer c)
+        public IHttpActionResult addImage(Customer c)
         {
-            var detail = db.Customers.Where(x => x.Username == c.Username && x.PhoneNumber == c.PhoneNumber).FirstOrDefault();
-            if (detail == null)
-            {
-                db.Customers.Add(c);
-                db.SaveChanges();
+            var query = from result in db.Customers
+                        where result.Username == c.Username
+                        select result;
 
+            foreach(Customer result in query)
+            {
+                result.Image = c.Image;
+            }
+            if (ModelState.IsValid)
+            {
+                db.SaveChanges();
                 return Ok(JObject.Parse("{success : true}"));
             }
             else

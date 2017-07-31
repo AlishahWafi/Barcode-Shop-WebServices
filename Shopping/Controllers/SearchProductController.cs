@@ -9,20 +9,18 @@ using System.Web.Http;
 
 namespace Shopping.Controllers
 {
-    public class registerController : ApiController
+    public class SearchProductController : ApiController
     {
         DBShoppingEntities db = new DBShoppingEntities();
 
         [HttpPost]
-        public IHttpActionResult register(Customer c)
+        public IHttpActionResult search(Product p)
         {
-            var detail = db.Customers.Where(x => x.Username == c.Username && x.PhoneNumber == c.PhoneNumber).FirstOrDefault();
-            if (detail == null)
-            {
-                db.Customers.Add(c);
-                db.SaveChanges();
+            var detail = db.Products.Where(x => x.Name.Contains(p.Name) || x.Name.StartsWith(p.Name) || x.Name.EndsWith(p.Name));
 
-                return Ok(JObject.Parse("{success : true}"));
+            if (detail != null)
+            {
+                return Ok(detail);
             }
             else
             {

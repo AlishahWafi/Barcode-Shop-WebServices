@@ -9,22 +9,22 @@ using System.Web.Http;
 
 namespace Shopping.Controllers
 {
-    public class loginController : ApiController
+    public class UserProfileController : ApiController
     {
         DBShoppingEntities db = new DBShoppingEntities();
-
+        
         [HttpPost]
-        public IHttpActionResult login(Customer c)
+        public IHttpActionResult userProfile(Customer customer)
         {
-            var detail = db.Customers.Where(x => x.Username == c.Username && x.Password == c.Password).FirstOrDefault();
+            var details = db.Customers.Where(x => x.Username == customer.Username);
 
-            if (detail != null)
+            if ( details != null)
             {
-                return Ok(detail);
+                return Ok(details);
             }
             else
-            {                        
-                return Ok(JObject.Parse("{success : false}"));
+            {
+                return Ok(JObject.Parse("{sucess : false}"));
             }
         }
     }
